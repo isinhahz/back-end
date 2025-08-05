@@ -8,9 +8,10 @@ const MESSAGE_ERROR_EMPTY         = 'ERRO: Não foi possível calcular a média,
 const MESSAGE_ERROR_OUT_OF_RANGE  = 'ERRO: Não é possível receber valores menores que 0 ou valores maiores que 10!'
 const MESSAGE_ERROR_NAN           = 'ERRO: Não é possível processar o calculo da média com caracteres. Deve-se entrar apenas com números entre 0 e 10!'
 
+//Import da biblioteca para calcular as médias escolares
+const mediaEscolar = require('./modulo/media.js')
 
 //Import da biblioteca para permitir a entrada de dados pelo terminal
-const { stat } = require('console')
 var readline = require('readline')
 
 //Criando uma interface de entrada e saída de dados no terminal
@@ -95,19 +96,17 @@ entradaDeDados.question('Digite o nome do aluno:', function(nome){
                         //Validação para bloquear a entrada de letras
                     }else if(isNaN(nota1) || isNaN(nota2) || isNaN(nota3) || isNaN(nota4)){
                         console.log(MESSAGE_ERROR_NAN)
-
                     }else{
-                        let media = (Number(nota1) + Number(nota2) + Number(nota3) + Number(nota4)) / 4
-                        let statusAluno
-                        if(media < 5){
-                            statusAluno = 'REPROVADO'
-                        }else if(media >= 5 && media < 7){
-                            statusAluno = 'EXAME'
-                        }else if(media >=7 && media <=10){
-                            statusAluno = 'APROVADO'
-                        }
+                       // Math. (possivel classe utilizada no exercicio)
+                        //Chama a função para calcular a média
+                        let media = mediaEscolar.calcularMedia(nota1, nota2, nota3, nota4)
 
-                        console.log(`O aluno ${nomeAluno} teve a média: ${media.toFixed(1)} e esta ${statusAluno}`)
+                        //Chama a função para retornar o status da média
+                        let statusAluno = mediaEscolar.validarStatusMedia(media)
+                      
+                        if(statusAluno){
+                        console.log(`O aluno ${nomeAluno} teve a média: ${media} e esta ${statusAluno}`)
+                        }
                     }
 
                 })//Fecha a entrada da nota4
